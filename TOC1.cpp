@@ -5,18 +5,18 @@
 using namespace std;
 
 vector< vector<string> > input_matrix(int n){
-    int i, j, k;
+    int i, j;
     string x;
     vector< vector<string> > moves;
     for(i=0;i<n;i++){
+            vector<string> row;
             cout<<"For state "<<i<<endl;
         for(j=0;j<n;j++){
             cout<<"For state "<<j<<endl;
             cin>>x;
-            moves[i].push_back(x);
-
-
+            row.push_back(x);
         }
+        moves.push_back(row);
     }
     return moves;
 }
@@ -27,9 +27,21 @@ bool hasA(char x, string str){
     while(str[i]!='\0'){
         if(x==str[i]){
             res=true;
-        }
+            }
+            i++;
     }
     return res;
+}
+
+int check_query(string q, string sym){
+    int i=0, ret=1;
+    while(i<q.size()){
+        if(!(hasA(q[i], sym))){
+            ret=0;
+        }
+        i++;
+    }
+    return ret;
 }
 
 int accept(string chars, vector< vector<string> > moves, string query){
@@ -37,8 +49,8 @@ int accept(string chars, vector< vector<string> > moves, string query){
     while(query[i]!='\0'){
         k=0; flag=0;
         while(k<moves.size() && flag==0){
-                if(hasA(query[i], moves[state][k])){
-                    state=k;flag=1;
+            if(hasA(query[i], moves[state][k])){
+                state=k;flag=1;
             }
             k++;
         }
@@ -53,18 +65,28 @@ int accept(string chars, vector< vector<string> > moves, string query){
 }
 
 int main(){
+    int cont=1;
     string symbols;
     cout<<"Enter list of symbols as a string\n";
     cin>>symbols;
     vector< vector<string> > mat=input_matrix(symbols.size());
+    while(cont){
     cout<<"Enter any string to check\n";
     string query;
     cin>>query;
-    if(accept(symbols, mat, query)==1){
-        cout<<"accepted\n";
+    if(check_query(query, symbols)){
+        if(accept(symbols, mat, query)==1){
+            cout<<"accepted\n";
+        }
+        else{
+            cout<<"not accepted\n";
+        }
     }
     else{
-        cout<<"not accepted\n";
+        cout<<"Query is not in the language of the DFA\n";
+    }
+    cout<<"Press 1 if you wish to continue, else press 0\n";
+    cin>>cont;
     }
     return 0;
 }
