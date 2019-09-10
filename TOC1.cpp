@@ -1,22 +1,32 @@
 #include<iostream>
 #include<vector>
 #include<string>
+#include<fstream>
 
 using namespace std;
 
 vector< vector<string> > input_matrix(int n){
     int i, j;
-    string x;
+    string x, filename;
+    fstream file;
+    cout<<"Enter file name of input\n";
+    cin>>filename;
+    file.open(filename.c_str(), ios::in);
     vector< vector<string> > moves;
     for(i=0;i<n;i++){
             vector<string> row;
-            cout<<"For state "<<i<<endl;
         for(j=0;j<n;j++){
-            cout<<"For state "<<j<<endl;
-            cin>>x;
+            getline(file, x);
             row.push_back(x);
+            x.erase();
         }
         moves.push_back(row);
+    }
+    file.close();
+    for(i=0;i<n;i++){
+        for(j=0;j<n;j++){
+            cout<<moves[i][j]<<"\n";
+        }
     }
     return moves;
 }
@@ -90,14 +100,6 @@ int main(){
     }
     return 0;
 }
-  /* for(i=0;i<query.end();i++){
-        for(j=0;j<n;j++){
-            if(query[i]==moves[state][j]){
-                state=j;
-                break;
-            }
-        }
-    } */
 
 
 
